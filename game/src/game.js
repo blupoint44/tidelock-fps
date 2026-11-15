@@ -28,7 +28,7 @@ export class Game {
     this.renderer.shadowMap.enabled = !opts.lowGfx;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.12;
+    this.renderer.toneMappingExposure = 1.22;
     container.appendChild(this.renderer.domElement);
 
     this.scene = new THREE.Scene();
@@ -91,6 +91,10 @@ export class Game {
   buildViewmodelAnchor() {
     this.vmAnchor = new THREE.Group();
     this.camera.add(this.vmAnchor);
+    // a soft warm light riding the camera keeps the viewmodel readable
+    const vmLight = new THREE.PointLight(0xffd9b0, 0.55, 4.5);
+    vmLight.position.set(0.15, 0.05, -0.25);
+    this.camera.add(vmLight);
     this.scene.add(this.camera);
     this.vm = null; this.vmMuzzle = null; this.vmFor = null;
   }
@@ -160,6 +164,7 @@ export class Game {
     if (this.vm) { this.vmAnchor.remove(this.vm); }
     const w = this.player.weapon;
     const built = buildViewmodel(w.id, TEAMS.breakers.color);
+    built.group.scale.setScalar(0.7);
     this.vm = built.group; this.vmMuzzle = built.muzzle;
     this.vmAnchor.add(this.vm);
   }
@@ -470,7 +475,7 @@ export class Game {
   update(dt) {
     const t = performance.now() / 1000;
     for (const fn of this.world.tickers) fn(dt, t);
-    this.effects.update(dt);
+    this.effects.update(this.staticScene ? 0.004 : dt);
     this.hud.update(dt);
     this.chargeLampMat.emissiveIntensity = 1.8 + Math.sin(t * (this.charge && this.charge.state === 'planted' ? 9 : 3)) * 1.1;
     this.updateChargeProp();
@@ -484,7 +489,6 @@ export class Game {
     if (this.staticScene) {
       // posed first-person screenshot scene: camera and effects only
       this.updateCamera(0.016);
-      this.effects.update(0.004);
       this.renderer.render(this.scene, this.camera);
       return;
     }
@@ -713,9 +717,9 @@ export class Game {
     if (p.switchT > 0) dip = -Math.sin((p.switchT / 0.32) * Math.PI) * 0.17;
     if (p.weapon && p.weapon.reloading) dip = -Math.sin(Math.min(1, 1 - p.weapon.reloadT / p.weapon.def.reloadTime) * Math.PI) * 0.22;
     vm.position.set(
-      0.235 * (1 - ads) + bobX * (1 - ads),
-      -0.225 + ads * 0.077 + Math.abs(Math.cos(p.bobPhase)) * 0.008 * p.bobAmt + dip,
-      -0.45 - this.recoil * 0.7
+      0.25 * (1 - ads) + bobX * (1 - ads),
+      -0.235 + ads * 0.1825 + Math.abs(Math.cos(p.bobPhase)) * 0.008 * p.bobAmt + dip,
+      -0.5 - this.recoil * 0.7
     );
     vm.rotation.set(this.recoil * 1.4 + (dip ? -dip * 1.1 : 0), 0, 0);
     const fov = 74 - ads * (p.weapon.def.zoom > 2 ? 34 : 13);

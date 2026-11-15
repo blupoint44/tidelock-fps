@@ -52,8 +52,8 @@ export function setupShot(game, name) {
     p.pitch = 0.02;
     game.refreshViewmodel();
     game.staticScene = true;
-    poseBot(wardens[0], 11, -15.5, Math.PI / 2, { walk: 2.8 });
-    poseBot(wardens[1], 16, -20, Math.PI / 2);
+    poseBot(wardens[0], 10, -14.5, Math.PI / 2, { walk: 2.8 });
+    poseBot(wardens[1], 15, -18.5, Math.PI / 2);
     poseBot(wardens[2], 30, 21, Math.PI / 2);
     poseBot(wardens[3], 33, 14, Math.PI / 2);
     poseBot(breakers[0], -12, -20, -Math.PI / 2, { walk: 0.7 });
@@ -64,13 +64,13 @@ export function setupShot(game, name) {
     hud.setVitals(72, 40);
     hud.setMoney(3400);
     hud.setAmmo(18, 75, 'LONGSHORE AR');
-    hud.killfeed('<span class="kb">You</span> <span class="wpn">Longshore AR</span> <span class="kw">Tarn</span> <span class="hs">HEADSHOT</span>');
-    hud.killfeed('<span class="kw">Vigil</span> <span class="wpn">Rook-9</span> <span class="kb">Grift</span>');
     game.shotIgnite = () => {
+      hud.killfeed('<span class="kb">You</span> <span class="wpn">Longshore AR</span> <span class="kw">Tarn</span> <span class="hs">HEADSHOT</span>');
+      hud.killfeed('<span class="kw">Vigil</span> <span class="wpn">Rook-9</span> <span class="kb">Grift</span>');
       game.camera.updateMatrixWorld();
       const eye = p.eyePos(new THREE.Vector3());
       const muzzle = game.vmMuzzle.getWorldPosition(new THREE.Vector3());
-      const target = new THREE.Vector3(11, 2.15, -15.5);
+      const target = new THREE.Vector3(10, 2.15, -14.5);
       game.effects.tracer(muzzle, target, 0xfff3cf);
       game.effects.impact(target, false);
       game.effects.flash(muzzle);
@@ -79,13 +79,13 @@ export function setupShot(game, name) {
   } else if (name === 'plant') {
     // The plant at Sluice A, covered by two teammates.
     const s = SITES.A;
-    game.shotCamera = { pos: new THREE.Vector3(26.5, 2.4, -25.5), look: new THREE.Vector3(s.plant[0], 1, s.plant[1]) };
+    game.shotCamera = { pos: new THREE.Vector3(20, 2.4, -18.5), look: new THREE.Vector3(s.plant[0] + 0.5, 0.8, s.plant[1]) };
     poseBot(breakers[0], s.plant[0], s.plant[1], -Math.PI / 2, { channel: 'plant' });
     breakers[0].channelPos = { x: s.plant[0], z: s.plant[1] };
     game.charge = { state: 'planted', carrier: null, pos: { x: s.plant[0] + 0.4, z: s.plant[1] + 0.3 }, site: 'A' };
-    poseBot(breakers[1], 29, -24.5, -Math.PI / 2);
-    poseBot(breakers[2], 30, -11.5, -Math.PI / 2, { walk: 4.4 });
-    poseBot(wardens[0], 19, -10, Math.PI / 2, { walk: 1.5 });
+    poseBot(breakers[1], 30, -13.5, -Math.PI / 2);
+    poseBot(breakers[2], 37, -24, Math.PI / 2, { walk: 4.4 });
+    poseBot(wardens[0], 31, 7, Math.PI / 2, { walk: 1.5 });
     poseBot(wardens[1], 36, 0, Math.PI / 2);
     poseBot(wardens[2], 30, 21, Math.PI / 2);
     poseBot(wardens[3], 33, 14, Math.PI / 2);

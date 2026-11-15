@@ -38,9 +38,9 @@ export class World {
   }
 
   buildLights(scene) {
-    const hemi = new THREE.HemisphereLight(0x8093c4, 0x3a2e24, 0.85);
+    const hemi = new THREE.HemisphereLight(0x8093c4, 0x3a2e24, 1.1);
     scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xffb377, 2.4);
+    const sun = new THREE.DirectionalLight(0xffb377, 2.6);
     sun.position.set(-60, 38, -18);
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
@@ -50,6 +50,10 @@ export class World {
     sun.shadow.bias = -0.0006;
     scene.add(sun);
     this.sun = sun;
+    // cool fill from the east so shaded faces keep their shape at dusk
+    const fill = new THREE.DirectionalLight(0x8fb4d8, 0.5);
+    fill.position.set(50, 26, 40);
+    scene.add(fill);
     scene.fog = new THREE.FogExp2(0x33283d, 0.0105);
   }
 

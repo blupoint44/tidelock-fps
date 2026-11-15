@@ -42,8 +42,8 @@ function loop(nowMs) {
   for (let i = 0; i < subSteps; i++) game.update(dt);
   if (shotName) {
     frames++;
-    if (frames === 10 && game.shotIgnite) game.shotIgnite();
-    if (frames === 18) window.__shotReady = true;
+    if (frames === 11 && game.shotIgnite) game.shotIgnite();
+    if (frames === 13) window.__shotReady = true;
   }
 }
 requestAnimationFrame(loop);
